@@ -1,5 +1,30 @@
+stages:
+  - build
+  - test
+
 build website:
+  stage: build
+  image: node
+  script:
+    - npm install
+    - npm init gatsby
+  artifacts:
+    paths:
+      - ./public
+
+test artifact:
+  image: alpine
+  stage: test
+  script:
+    - echo $(ls)
+    - grep -q "Gatsby" src/pages/index.js
+
+test website:
+  image: node
+  stage: test
   script:
     - npm install
     - npm init gatsby
     - npm run develop
+    - echo $(ls)
+    - curl "http://localhost:8000" | grep -q "Gatsby"
